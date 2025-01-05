@@ -12,7 +12,8 @@
 		"ghcr.io/cirolosapio/devcontainers-features/alpine-bash:0": {},
 		"ghcr.io/cirolosapio/devcontainers-features/alpine-git:0": {},
 		"ghcr.io/cirolosapio/devcontainers-features/alpine-gh-cli:0": {},
-		"ghcr.io/cirolosapio/devcontainers-features/alpine-gpg:0": {}
+		"ghcr.io/cirolosapio/devcontainers-features/alpine-gpg:0": {},
+		"ghcr.io/cirolosapio/devcontainers-features/alpine-openssh:0": {}
 	},
 	"customizations": {
 		"vscode": {
