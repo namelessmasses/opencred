@@ -15,6 +15,9 @@
 		"ghcr.io/cirolosapio/devcontainers-features/alpine-gpg:0": {},
 		"ghcr.io/cirolosapio/devcontainers-features/alpine-openssh:0": {}
 	},
+	"mounts": [
+		"source=${localWorkspaceFolder}/configs,target=/etc/app-config,type=bind"
+	],
 	"customizations": {
 		"vscode": {
 			"extensions": [
