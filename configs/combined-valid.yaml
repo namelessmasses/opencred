@@ -1,0 +1,311 @@
+# Copyright 2023 - 2024 California Department of Motor Vehicles
+# Copyright 2023 - 2024 Digital Bazaar, Inc.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+app:
+  # server:
+    # baseUri: https://evil-cows-return.loca.lt
+  opencred:
+    caStore:
+      - pem: |
+          -----BEGIN CERTIFICATE-----
+          MIIBjjCCATUCFB/As5aApc8pwSiUsw54hmOUKD/6MAoGCCqGSM49BAMCMEoxCzAJ
+          BgNVBAYTAlVTMRMwEQYDVQQIDApDYWxpZm9ybmlhMRAwDgYDVQQKDAdleGFtcGxl
+          MRQwEgYDVQQDDAtleGFtcGxlLmNvbTAeFw0yNTAxMDUxNDA2MTRaFw0yNjAxMDUx
+          NDA2MTRaMEoxCzAJBgNVBAYTAlVTMRMwEQYDVQQIDApDYWxpZm9ybmlhMRAwDgYD
+          VQQKDAdleGFtcGxlMRQwEgYDVQQDDAtleGFtcGxlLmNvbTBZMBMGByqGSM49AgEG
+          CCqGSM49AwEHA0IABG+gcizARbWtQ//ZmIzuu4KrCHpEmuqPeIpq16FMDxd8FOwp
+          NoCXaXsmCflKB5WB6PdrsZgdCMf8kM39eWAffPkwCgYIKoZIzj0EAwIDRwAwRAIg
+          XStVHAAV8XBDmYf2nU8Lvtj3VRVu3z9kyyB1FR+DRpICIDP/ug1q5IEtf1oSb191
+          zqC4eZ/02fYTFkhZL1RdNdZo
+          -----END CERTIFICATE-----
+    signingKeys:
+      - type: ES256
+        id: 7127d2158323f8b7ba5a40f442035a4885d0dffab102ad5f76c1b3927d37956d
+        privateKeyPem: |
+          -----BEGIN PRIVATE KEY-----
+          MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgXpU0mb98nf/ZyL53
+          tktLX7w8l+vC6eiu8b2utaY9xpChRANCAARvoHIswEW1rUP/2ZiM7ruCqwh6RJrq
+          j3iKatehTA8XfBTsKTaAl2l7Jgn5SgeVgej3a7GYHQjH/JDN/XlgH3z5
+          -----END PRIVATE KEY-----
+        publicKeyPem: |
+          -----BEGIN PUBLIC KEY-----
+          MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEb6ByLMBFta1D/9mYjO67gqsIekSa
+          6o94imrXoUwPF3wU7Ck2gJdpeyYJ+UoHlYHo92uxmB0Ix/yQzf15YB98+Q==
+          -----END PUBLIC KEY-----
+        purpose:
+          - id_token
+          - authorization_request
+    relyingParties:
+      - name: "Test Relying Party (Native)"
+        clientId: "rp1"
+        clientSecret: "DeepestAndDarkest"
+        description: "Relying Party Test App"
+        primaryLogo: "https://www.pexels.com/photo/abstract-art-artistic-artwork-310436/"
+        primaryLink: "https://example.com"
+        secondaryLogo: "https://pixabay.com/photos/rabbit-cartoon-beach-sand-drawing-1664927/"
+        secondaryLink: "https://example.com"
+        homeLink: "https://example.com"
+        explainerVideo:
+          id: "dQw4w9WgXcQ"
+          provider: youtube
+        backgroundImage: "https://pixabay.com/illustrations/seamless-pattern-background-tile-1904165/"
+        redirectUri: "http://localhost:3000"
+        idTokenExpirySeconds: 3600
+        claims:
+          - name: "dl_number"
+            path: "driversLicense.document_number"
+        brand:
+          cta: "#0B669D"
+          primary: "#045199"
+          header: "#0979c4"
+        scopes:
+          - name: "openid"
+            description: "Open ID Connect"
+        workflow:
+          type: native
+          id: z1A32xJZGqBeAEcMq56avmw2L
+          untrustedVariableAllowList:
+            - exampleParam
+            - exampleParam2
+          initialStep: default
+          steps:
+            default:
+              callback:
+                url: http://localhost:9000/callback
+                headersVariable: callbackHeaders
+                oauth:
+                  issuer: http://example.com
+                  tokenUrl: http://example.com/token
+                  clientSecret: exampleClientSecret
+                  clientId: exampleClientId
+                  scope:
+                    - default
+              createChallenge: true
+              verifiablePresentationRequest: >
+                {
+                  "query": {
+                    "type": "QueryByExample",
+                    "credentialQuery": {
+                      "reason": "Please present your VC.",
+                      "example": {
+                        "type": [
+                          "Iso18013DriversLicenseCredential"
+                        ]
+                      }
+                    }
+                  }
+                }
+              constraintsOverride: >
+                {
+                  "fields": [
+                    {
+                      "path": [
+                        "$.vc.type"
+                      ],
+                      "filter": {
+                        "type": "string",
+                        "pattern": "Iso18013DriversLicenseCredential"
+                      }
+                    }
+                  ]
+                }
+      - name: "Test App"
+        # An example that uses a remove VC-API exchanger to connect with a wallet
+        # See Verifiable Credentials API Documentation: https://w3c-ccg.github.io/vc-api/
+        clientId: "32bb6cec384b"
+        clientSecret: "DeepestAndDarkest"
+        description: "Relying Party Test App"
+        icon: "https://placekitten.com/200/200"
+        backgroundImage: "https://placekitten.com/800/300"
+        idTokenExpirySeconds: 3600
+        brand:
+          cta: "#0B669D"
+          primary: "#045199"
+          header: "#0979c4"
+        redirectUri: "http://localhost:3000"
+        scopes:
+          - name: "openid"
+            description: "Open ID Connect"
+        claims:
+          - name: "email"
+            path: "email"
+        workflow:
+          type: vc-api
+          id: 32bb6cec384b
+          vpr: >
+            query: {
+              "type": "QueryByExample",
+              "credentialQuery": {
+                "reason": "Please present your VC.",
+                "example": {
+                  "type": [
+                    "Iso18013DriversLicenseCredential"
+                  ]
+                }
+              }
+            }
+          baseUrl: https://example.org/exchanges/123
+          capability: "example"
+          clientSecret: "example"
+      - clientId: 4e3a8b7b4b7b4b7b4b7b
+        # Microsoft Entra Verified Id workflow config
+        # Many of these config fields map to request fields in the APIs linked below:
+        #   https://learn.microsoft.com/en-us/entra/verified-id/get-started-request-api
+        #   https://learn.microsoft.com/en-us/entra/verified-id/presentation-request-api
+        caStore: false
+        configFrom: 32bb6cec384b # clientId of another relying party to serve as default values
+        trustedCredentialIssuers:
+          - did:web:example.com
+        workflow:
+          type: microsoft-entra-verified-id
+          id: 4e3a8b7b4b7b4b7b4b7b
+          apiBaseUrl: https://api.entra.microsoft.example.com/v1.0 # required (will generally be https://verifiedid.did.msidentity.com/v1.0)
+          apiLoginBaseUrl: https://login.entra.microsoft.example.com # required (will generally be https://login.microsoftonline.com)
+          apiClientId: "TODO" # required
+          apiClientSecret: "TODO" # required
+          apiTenantId: "TODO" # required
+          verifierDid: "TODO" # required
+          verifierName: "TODO" # required
+          credentialVerificationPurpose: "So that we can evaluate your permission to access the requested resource" # optional (default populated in middleware unless overridden here)
+          allowRevokedCredentials: false # optional (default populated in middleware unless overridden here)
+          validateLinkedDomain: false # optional (default populated in middleware unless overridden here)
+          includeQrCode: true # optional (default populated in middleware unless overridden here)
+          initialStep: default
+          steps:
+            default:
+              acceptedCredentialType: "TODO" # required
+      - name: "load-test"
+        clientId: "load-test"
+        clientSecret: "DeepestAndDarkest"
+        description: "Load Testing Profile"
+        icon: "https://imagedelivery.net/I-hc6FAYxquPgv-npvTcWQ/241cb0c9-d92c-40b7-1745-6d5e68a45d00/public"
+        backgroundImage: "https://imagedelivery.net/I-hc6FAYxquPgv-npvTcWQ/f7516576-f9d3-4a15-1b9e-e95281613700/public"
+        redirectUri: "http://localhost:3000"
+        idTokenExpirySeconds: 3600
+        claims:
+          - name: "dl_number"
+            path: "driversLicense.document_number"
+        brand:
+          cta: "#0B669D"
+          primary: "#045199"
+          header: "#0979c4"
+        scopes:
+          - name: "openid"
+            description: "Open ID Connect"
+        workflow:
+          type: native
+          id: load-test
+          initialStep: default
+          steps:
+            default:
+              createChallenge: true
+              verifiablePresentationRequest: >
+                {
+                  "query": {
+                    "type": "QueryByExample",
+                    "credentialQuery": {
+                      "reason": "Please present your VC.",
+                      "example": {
+                        "type": [
+                          "DomainLinkageCredential"
+                        ]
+                      }
+                    }
+                  }
+                }
+              constraintsOverride: >
+                {
+                  "fields": [
+                    {
+                      "path": [
+                        "$.vc.type"
+                      ],
+                      "filter": {
+                        "type": "string",
+                        "pattern": "DomainLinkageCredential"
+                      }
+                    }
+                  ]
+                }
+    options:
+      exchangeProtocols:
+        - chapi
+        - openid4vp
+    defaultBrand:
+      cta: "#0B669D"
+      primary: "#045199"
+      header: "#0979c4"
+    audit:
+      enable: true
+      fields:
+        - type: text
+          id: given_name
+          name: First Name
+          path: "$.credentialSubject.given_name"
+          required: true
+        - type: text
+          id: family_name
+          name: Last Name
+          path: "$.credentialSubject.family_name"
+          required: false
+        - type: date
+          id: birth_date
+          name: Date of Birth
+          path: "$.credentialSubject.birth_date"
+          required: true
+        - type: number
+          id: height
+          name:	Height (cm)
+          path: "$.credentialSubject.height"
+          required: false
+        - type: dropdown
+          id: sex
+          name:	Sex
+          path: "$.credentialSubject.sex"
+          required: false
+          options:
+            "Male": 1
+            "Female": 2
+        - type: dropdown
+          id: senior_citizen
+          name:	Are you a senior citizen?
+          path: "$.credentialSubject.senior_citizen"
+          required: true
+          options:
+            "Yes": 1
+            "No": null
+          default: "No"
+    reCaptcha:
+      enable: true
+      version: 2
+      siteKey: 6LcNDSjdAAAAAAAAIe2uy0gavf0reiuhfer12345
+      secretKey: 6LcNDSjdAAAAAAAAIe3uy1gavf1reiuhfer67890
+      pages:
+        - audit
+    defaultLanguage: en
+    translations:
+      en:
+        qrTitle: Login with your Wallet app
+        qrPageExplain: Scan the following QR Code using the Wallet app on your phone.
+        qrPageExplainHelp: (<a href="https://youtube.com">How do I do it?</a>)
+        qrFooter: "Note: Already on your phone with the Wallet app? Open the Wallet app, then come back and tap on the QR code above."
+        qrFooterHelp: Difficulty using the Wallet app to login? revert to using password <a href="#">here</a>
+        qrDisclaimer: If you don't have a Wallet app download it from the app store.
+        qrExplainerText: (How do I do it?)
+        chapiPageAnotherWay: "Looking for a QR code to scan with your wallet app instead?"
+        loginCta: "Login with your credential wallet"
+        loginExplain: "To login with your credential wallet, you will need to have the credential wallet app <with configurable URL to app stores> installed"
+        appInstallExplain: "If you don't have a credential wallet yet, you can get one by downloading the credential wallet app <with configurable URL to app stores>"
+        appCta: "Open wallet app"
+        copyright: "Powered by OpenCred"
+        pageTitle: "Login"
+        home: "Home"
+        verificationSuccess: "Success! Your credential has been shared."
+        exchangeActiveGoBack: Back
+        exchangeActiveExpiryMessage: "Please complete within the allotted time:"
+        exchangeErrorTitle: Exchange failed
+        exchangeErrorSubtitle: "Error details:"
+        exchangeResetTitle: Please try again.
+        exchangeReset: Retry exchange
